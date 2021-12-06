@@ -46,13 +46,13 @@
 
 <div class="container">
     <div class="row">
-        <h2>Skills</h2>
+        <h2>Skills page</h2>
     </div>
 
     <div class="row">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group me-2" role="group" aria-label="Second group">
-                <a href="skills/createSkill" type="button" class="btn btn-primary">Add skill</a>
+                <a href="skills/createSkill" type="button" class="btn btn-success">Add skill</a>
             </div>
         </div>
         <table class="table">
@@ -73,8 +73,7 @@
                     <td>
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group me-2" role="group" aria-label="Second group">
-                                <a href="skills/updateSkill?updateId=<c:out value = '${skill.id}'/>" type="button" class="btn btn-warning">Edit</a>
-                                <a href="skills/skills?deleteId=<c:out value = '${skill.id}'/>" type="button" class="btn btn-danger">Remove</a>
+                                <a href="skills/about?aboutId=<c:out value = '${skill.id}'/>" type="button" class="btn btn-primary">About</a>
                             </div>
                         </div>
                     </td>
@@ -84,8 +83,6 @@
         </table>
     </div>
 </div>
-
-
 </body>
 </html>
 

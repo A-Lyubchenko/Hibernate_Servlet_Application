@@ -4,6 +4,7 @@ import lombok.*;
 import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,7 +33,29 @@ public class Developer implements  Identity {
 
     @Column(name = "salary")
     private Integer salary;
-//    private Company company;
+
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "developer_companie",
+            joinColumns = @JoinColumn(name = "developer_id"),
+            inverseJoinColumns = @JoinColumn(name = "companie_id"))
+    @ToString.Exclude
+
+    private List<Company> companies;
+
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "developer_project",
+            joinColumns = @JoinColumn(name = "developer_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @ToString.Exclude
+
+    private List<Project> projects;
 
 
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "developer_skill",
+            joinColumns = @JoinColumn(name = "developer_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id"))
+    @ToString.Exclude
+
+    private List<Skill> skills;
 }

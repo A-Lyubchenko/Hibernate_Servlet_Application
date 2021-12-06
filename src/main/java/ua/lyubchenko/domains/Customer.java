@@ -4,16 +4,13 @@ import lombok.*;
 import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @ToString
-//@NamedQueries({
-//        @NamedQuery(
-//                name = "read",
-//                query = "FROM Customer")})
 @Entity
 @Table(name = "customers")
 public class Customer implements  Identity {
@@ -27,4 +24,12 @@ public class Customer implements  Identity {
 
     @Column(name = "location")
     private String location;
+
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "companie_project",
+            joinColumns = @JoinColumn(name = "companie_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @ToString.Exclude
+
+    private List<Project> projects;
 }

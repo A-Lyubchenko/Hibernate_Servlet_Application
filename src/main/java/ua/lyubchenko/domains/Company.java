@@ -4,6 +4,7 @@ import lombok.*;
 import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -11,10 +12,6 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-//@NamedQueries({
-//        @NamedQuery(
-//                name = "read",
-//                query = "FROM Company")})
 @Entity
 @Table(name = "companies")
 public class Company implements Identity {
@@ -28,5 +25,21 @@ public class Company implements Identity {
 
     @Column(name = "location")
     private String location;
+
+    @OneToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "developer_companie",
+            joinColumns = @JoinColumn(name = "companie_id"),
+            inverseJoinColumns = @JoinColumn(name = "developer_id"))
+    @ToString.Exclude
+
+    private List<Developer> developers;
+
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "companie_project",
+            joinColumns = @JoinColumn(name = "companie_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @ToString.Exclude
+
+    private List<Project> projects;
 
 }

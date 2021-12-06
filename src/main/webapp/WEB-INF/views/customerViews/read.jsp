@@ -52,7 +52,7 @@
     <div class="row">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group me-2" role="group" aria-label="Second group">
-                <a href="customers/createCustomer" type="button" class="btn btn-primary">Add customer</a>
+                <a href="customers/createCustomer" type="button" class="btn btn-success">Add customer</a>
             </div>
         </div>
         <table class="table">
@@ -72,8 +72,7 @@
                     <td>
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group me-2" role="group" aria-label="Second group">
-                                <a href="customers/updateCustomer?updateId=<c:out value = '${customer.id}'/>" type="button" class="btn btn-warning">Edit</a>
-                                <a href="customers/customers?deleteId=<c:out value = '${customer.id}'/>" type="button" class="btn btn-danger">Remove</a>
+                                <a href="customers/about?aboutId=<c:out value = '${customer.id}'/>" type="button" class="btn btn-primary">About</a>
                             </div>
                         </div>
                     </td>

@@ -52,7 +52,7 @@
     <div class="row">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group me-2" role="group" aria-label="Second group">
-                <a href="developers/createDeveloper" type="button" class="btn btn-primary">Add developer</a>
+                <a href="developers/createDeveloper" type="button" class="btn btn-success">Add developer</a>
             </div>
         </div>
         <table class="table">
@@ -78,8 +78,7 @@
                     <td>
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group me-2" role="group" aria-label="Second group">
-                                <a href="developers/updateDeveloper?updateId=<c:out value = '${developer.id}'/>" type="button" class="btn btn-warning">Edit</a>
-                                <a href="developers/developers?deleteId=<c:out value = '${developer.id}'/>" type="button" class="btn btn-danger">Remove</a>
+                                <a href="developers/about?aboutId=<c:out value = '${developer.id}'/>" type="button" class="btn btn-primary">About</a>
                             </div>
                         </div>
                     </td>

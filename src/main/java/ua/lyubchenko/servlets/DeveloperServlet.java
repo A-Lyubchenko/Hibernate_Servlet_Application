@@ -1,7 +1,11 @@
 package ua.lyubchenko.servlets;
 
-import ua.lyubchenko.domains.Customer;
+import org.hibernate.Session;
+import ua.lyubchenko.connection.ApplicationConnection;
+import ua.lyubchenko.domains.Company;
 import ua.lyubchenko.domains.Developer;
+import ua.lyubchenko.domains.Project;
+import ua.lyubchenko.domains.Skill;
 import ua.lyubchenko.repositories.EntityRepository;
 import ua.lyubchenko.repositories.ICrud;
 
@@ -11,21 +15,38 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+
 
 @WebServlet("/developers/*")
 public class DeveloperServlet extends HttpServlet {
+    private final ICrud<Company> companyRepository = new EntityRepository<>();
     private final ICrud<Developer> developerRepository= new EntityRepository<>();
-
+    private final Session session = ApplicationConnection.getInstance();
+    private final ICrud<Project> projectRepository = new EntityRepository<>();
+    private final ICrud<Skill> skillRepository= new EntityRepository<>();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestURI = req.getRequestURI();
         if (requestURI.contains("/createDeveloper")) {
+            req.setAttribute("companies",companyRepository.read(Company.class));
+            req.setAttribute("projects", projectRepository.read(Project.class));
+            req.setAttribute("skills", skillRepository.read(Skill.class));
             req.getRequestDispatcher("/WEB-INF/views/developerViews/create.jsp").forward(req, resp);
             return;
 
         } else if (requestURI.contains("/updateDeveloper")) {
             req.setAttribute("updateId", req.getParameter("updateId"));
             req.getRequestDispatcher("/WEB-INF/views/developerViews/update.jsp").forward(req, resp);
+            return;
+        }
+        else if (requestURI.contains("/about")) {
+            Developer developer = session.get(Developer.class, Long.parseLong(req.getParameter("aboutId")));
+            req.setAttribute("developer", developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("aboutId"))));
+            req.setAttribute("projects", developer.getProjects());
+            req.setAttribute("companies",developer.getCompanies());
+            req.setAttribute("skills",developer.getSkills());
+            req.getRequestDispatcher("/WEB-INF/views/developerViews/about.jsp").forward(req, resp);
             return;
         }
 
@@ -51,6 +72,10 @@ public class DeveloperServlet extends HttpServlet {
             String sex = req.getParameter("sex");
             String phone_number = req.getParameter("phone_number");
             String salary = req.getParameter("salary");
+            String choseCompany = req.getParameter("company");
+            String chooseProject = req.getParameter("project");
+            String chooseSkill = req.getParameter("skill");
+
             if (name == null || name.matches("\\d+") || name.equals("") || age.matches("\\W+")
                     || sex == null || sex.equals("") || !sex.equals("male") && !sex.equals("female")
                     || !phone_number.matches("\\d{10}") || !salary.matches("\\d{1,5}")) {
@@ -58,12 +83,22 @@ public class DeveloperServlet extends HttpServlet {
                 return;
 
             }
+            Company company = session.get(Company.class, Long.valueOf(choseCompany));
+            Project project = session.get(Project.class, Long.valueOf(chooseProject));
+            Skill skill = session.get(Skill.class, Long.valueOf(chooseSkill));
+
             Developer developer = new Developer();
             developer.setName(name);
             developer.setAge(Integer.parseInt(age));
             developer.setSex(sex);
             developer.setPhone_number(phone_number);
             developer.setSalary(Integer.parseInt(salary));
+
+            developer.setCompanies(List.of(company));
+
+            developer.setProjects(List.of(project));
+
+            developer.setSkills(List.of(skill));
 
             developerRepository.create(developer);
             req.getSession().setAttribute("developer", developer);
@@ -82,8 +117,14 @@ public class DeveloperServlet extends HttpServlet {
                 return;
 
             }
-            Developer developer = new Developer(Long.parseLong(req.getParameter("updateId")),
-                    name, Integer.parseInt(age), sex, phone_number, Integer.parseInt(salary));
+            Developer developer = new Developer();
+            developer.setId(Long.parseLong(req.getParameter("updateId")));
+            developer.setName(name);
+            developer.setAge(Integer.parseInt(age));
+            developer.setSex(sex);
+            developer.setPhone_number(phone_number);
+            developer.setSalary(Integer.parseInt(salary));
+
             developerRepository.update(developer);
             req.getSession().setAttribute("developer", developer);
             resp.sendRedirect("/developers");

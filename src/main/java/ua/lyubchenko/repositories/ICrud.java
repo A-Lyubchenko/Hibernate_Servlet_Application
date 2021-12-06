@@ -12,4 +12,6 @@ public interface ICrud<T> {
 
     void delete(T id);
 
+    T getById(Class<T> clazz,Long id);
+
 }

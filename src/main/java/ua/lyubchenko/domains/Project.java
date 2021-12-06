@@ -5,6 +5,7 @@ import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -28,5 +29,29 @@ public class Project implements Identity {
 
     @Column(name = "coast")
     private Integer coast;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "customer_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id"))
+    @ToString.Exclude
+
+    private List<Customer> customer;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "companie_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "companie_id"))
+    @ToString.Exclude
+
+    private List<Company> company;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "developer_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "developer_id"))
+    @ToString.Exclude
+
+    private List<Developer> developers;
 
 }

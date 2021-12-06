@@ -4,6 +4,7 @@ import lombok.*;
 import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -24,8 +25,12 @@ public class Skill implements Identity {
     @Column(name = "level")
     private String level;
 
-    @Override
-    public String getName() {
-        return null;
-    }
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "developer_skill",
+            joinColumns = @JoinColumn(name = "skill_id"),
+            inverseJoinColumns = @JoinColumn(name = "developer_id"))
+    @ToString.Exclude
+
+    private List<Developer> developers;
+
 }

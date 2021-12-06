@@ -1,6 +1,7 @@
 package ua.lyubchenko.servlets;
 
-import ua.lyubchenko.domains.Company;
+import org.hibernate.Session;
+import ua.lyubchenko.connection.ApplicationConnection;
 import ua.lyubchenko.domains.Customer;
 import ua.lyubchenko.repositories.EntityRepository;
 import ua.lyubchenko.repositories.ICrud;
@@ -15,7 +16,7 @@ import java.io.IOException;
 @WebServlet("/customers/*")
 public class CustomerServlet extends HttpServlet {
     private final ICrud<Customer> customerRepository= new EntityRepository<>();
-
+    private final Session session = ApplicationConnection.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,6 +28,13 @@ public class CustomerServlet extends HttpServlet {
         } else if (requestURI.contains("/updateCustomer")) {
             req.setAttribute("updateId", req.getParameter("updateId"));
             req.getRequestDispatcher("/WEB-INF/views/customerViews/update.jsp").forward(req, resp);
+            return;
+        }
+        else if (requestURI.contains("/about")) {
+            Customer customer = session.get(Customer.class, Long.parseLong(req.getParameter("aboutId")));
+            req.setAttribute("customer", customerRepository.getById(Customer.class, Long.parseLong(req.getParameter("aboutId"))));
+            req.setAttribute("projects", customer.getProjects());
+            req.getRequestDispatcher("/WEB-INF/views/customerViews/about.jsp").forward(req, resp);
             return;
         }
 
@@ -65,7 +73,10 @@ public class CustomerServlet extends HttpServlet {
         } else if (requestURI.contains("/updateCustomer")) {
             String name = req.getParameter("name");
             String location = req.getParameter("location");
-            Customer customer = new Customer(Long.parseLong(req.getParameter("updateId")), name, location);
+            Customer customer = new Customer();
+            customer.setId(Long.parseLong(req.getParameter("updateId")));
+            customer.setName(name);
+            customer.setLocation(location);
             if (name == null || location == null || name.equals("") || location.equals("")
                     || name.matches("\\d+") || location.matches("\\d+")) {
                 resp.sendRedirect("/customers/updateCustomer");
@@ -77,7 +88,6 @@ public class CustomerServlet extends HttpServlet {
             req.getSession().setAttribute("customer", customer);
             resp.sendRedirect("/customers");
         }
-
 
     }
 }

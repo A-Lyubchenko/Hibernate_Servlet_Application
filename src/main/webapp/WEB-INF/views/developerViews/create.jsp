@@ -45,6 +45,8 @@
 <br/>
 <br/>
 <form class="row g-3" method="POST" action="developers/createDeveloper">
+    <input type="hidden" name="companyId" value="${company.id}">
+
     <div class="col-md-6">
         <label class="form-label" for="name"><strong>Enter name</strong></label>
         <input class="form-control" type="text" name="name" id="name" placeholder="developer/name">
@@ -82,6 +84,40 @@
         <input class="form-control" type="text" name="salary" id="salary" placeholder="developer/salary">
         <div style="color: green" if="${fields.hasErrors('salary')}" errors="${salary}">Salary must be decimal and between 1 decimal and 5</div>
 
+    </div>
+    <br/>
+    <br/>
+    <div class="col-md-6">
+    <strong>Choose Company</strong>
+        <select class="form-select" aria-label="Default select example" name="company">
+            <option selected>Open this company menu</option>
+            <c:forEach var="company" items="${companies}" varStatus="session">
+
+                <option value="${company.id}">${company.name}</option>
+        </c:forEach>
+            </select>
+    </div>
+    <br/>
+    <br/>
+    <div class="col-md-6">
+        <strong>Choose Project</strong>
+        <select class="form-select" aria-label="Default select example" name="project">
+            <option selected>Open this company menu</option>
+            <c:forEach var="project" items="${projects}" varStatus="session">
+                <option value="${project.id}">${project.name}</option>
+            </c:forEach>
+        </select>
+    </div>
+    <br/>
+    <br/>
+    <div class="col-md-6">
+        <strong>Choose Skill</strong>
+        <select class="form-select" aria-label="Default select example" name="skill">
+            <option selected>Open this company menu</option>
+            <c:forEach var="skill" items="${skills}" varStatus="session">
+                <option value="${skill.id}">${skill.department}</option>
+            </c:forEach>
+        </select>
     </div>
     <br/>
     <br/>

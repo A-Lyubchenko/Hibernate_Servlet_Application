@@ -1,5 +1,7 @@
 package ua.lyubchenko.servlets;
 
+import org.hibernate.Session;
+import ua.lyubchenko.connection.ApplicationConnection;
 import ua.lyubchenko.domains.Skill;
 import ua.lyubchenko.repositories.EntityRepository;
 import ua.lyubchenko.repositories.ICrud;
@@ -14,6 +16,7 @@ import java.io.IOException;
 @WebServlet("/skills/*")
 public class SkillServlet extends HttpServlet {
     private final ICrud<Skill> skillRepository= new EntityRepository<>();
+    private final Session session = ApplicationConnection.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -24,6 +27,12 @@ public class SkillServlet extends HttpServlet {
         } else if (requestURI.contains("/updateSkill")) {
             req.setAttribute("updateId", req.getParameter("updateId"));
             req.getRequestDispatcher("/WEB-INF/views/skillViews/update.jsp").forward(req, resp);
+            return;
+        } else if (requestURI.contains("/about")) {
+            Skill skill = session.get(Skill.class, Long.parseLong(req.getParameter("aboutId")));
+            req.setAttribute("skill", skillRepository.getById(Skill.class, Long.parseLong(req.getParameter("aboutId"))));
+            req.setAttribute("developers", skill.getDevelopers());
+            req.getRequestDispatcher("/WEB-INF/views/skillViews/about.jsp").forward(req, resp);
             return;
         }
         String deleteId = req.getParameter("deleteId");
@@ -67,7 +76,10 @@ public class SkillServlet extends HttpServlet {
                 return;
 
             }
-            Skill skill = new Skill(Long.parseLong(req.getParameter("updateId")), department, level);
+            Skill skill = new Skill();
+            skill.setId(Long.parseLong(req.getParameter("updateId")));
+            skill.setDepartment(department);
+            skill.setLevel(level);
 
             skillRepository.update(skill);
             req.getSession().setAttribute("skill", skill);

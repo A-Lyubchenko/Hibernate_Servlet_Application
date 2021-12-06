@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>READ COMPANY</title>
+    <title>ABOUT PROJECT</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -45,44 +45,55 @@
 
 <div class="container">
     <div class="row">
-        <h2>Companies page</h2>
+        <h2>Project page</h2>
     </div>
 
-    <div class="row">
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group me-2" role="group" aria-label="Second group">
-                <a href="companies/createCompany" type="button" class="btn btn-success">Add company</a>
-            </div>
-        </div>
         <table class="table">
             <thead>
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
-                <th scope="col">Location</th>
+                <th scope="col">Start</th>
+                <th scope="col">Coast</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="company" items="${companies}" varStatus="session">
                 <tr>
-                    <td><c:out value = "${company.id}"/></td>
-                    <td><c:out value = "${company.name}"/></td>
-                    <td><c:out value = "${company.location}"/></td>
+                    <td><c:out value = "${project.id}"/></td>
+                    <td><c:out value = "${project.name}"/></td>
+                    <td><c:out value = "${project.start}"/></td>
+                    <td><c:out value = "${project.coast}"/></td>
                     <td>
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group me-2" role="group" aria-label="Second group">
-                                <a href="companies/about?aboutId=<c:out value = '${company.id}'/>" type="button" class="btn btn-primary">About</a>
+                                <a href="projects/updateProject?updateId=<c:out value = '${project.id}'/>" type="button" class="btn btn-warning">Edit</a>
+                                <a href="projects/developers?deleteId=<c:out value = '${project.id}'/>" type="button" class="btn btn-danger">Remove</a>
                             </div>
                         </div>
                     </td>
                 </tr>
-            </c:forEach>
+<%--            </c:forEach>--%>
             </tbody>
         </table>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name of Developers working int this project</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="developer" items="${developers}" varStatus="session">
+            <tr>
+                <td><c:out value = "${developer.name}"/></td>
+            </tr>
+        </c:forEach>
+        <%--            </c:forEach>--%>
+        </tbody>
+    </table>
+
     </div>
-</div>
-
-
 </body>
 </html>
 

@@ -46,13 +46,13 @@
 
 <div class="container">
     <div class="row">
-        <h2>Projects</h2>
+        <h2>Projects page</h2>
     </div>
 
     <div class="row">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group me-2" role="group" aria-label="Second group">
-                <a href="projects/createProject" type="button" class="btn btn-primary">Add project</a>
+                <a href="projects/createProject" type="button" class="btn btn-success">Add project</a>
             </div>
         </div>
         <table class="table">
@@ -74,8 +74,7 @@
                     <td>
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group me-2" role="group" aria-label="Second group">
-                                <a href="projects/updateProject?updateId=<c:out value = '${project.id}'/>" type="button" class="btn btn-warning">Edit</a>
-                                <a href="projects/projects?deleteId=<c:out value = '${project.id}'/>" type="button" class="btn btn-danger">Remove</a>
+                                <a href="projects/about?aboutId=<c:out value = '${project.id}'/>" type="button" class="btn btn-primary">About</a>
                             </div>
                         </div>
                     </td>

@@ -1,6 +1,7 @@
 package ua.lyubchenko.servlets;
 
-import ua.lyubchenko.domains.Developer;
+import org.hibernate.Session;
+import ua.lyubchenko.connection.ApplicationConnection;
 import ua.lyubchenko.domains.Project;
 import ua.lyubchenko.repositories.EntityRepository;
 import ua.lyubchenko.repositories.ICrud;
@@ -15,8 +16,8 @@ import java.sql.Date;
 
 @WebServlet("/projects/*")
 public class ProjectServlet extends HttpServlet {
-    private final ICrud<Project> projectRepository= new EntityRepository<>();
-
+    private final ICrud<Project> projectRepository = new EntityRepository<>();
+    private final Session session = ApplicationConnection.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestURI = req.getRequestURI();
@@ -27,7 +28,14 @@ public class ProjectServlet extends HttpServlet {
             req.setAttribute("updateId", req.getParameter("updateId"));
             req.getRequestDispatcher("/WEB-INF/views/projectViews/update.jsp").forward(req, resp);
             return;
+        } else if (requestURI.contains("/about")) {
+            Project project = session.get(Project.class, Long.parseLong(req.getParameter("aboutId")));
+            req.setAttribute("project", projectRepository.getById(Project.class, Long.parseLong(req.getParameter("aboutId"))));
+            req.setAttribute("developers", project.getDevelopers());
+            req.getRequestDispatcher("/WEB-INF/views/projectViews/about.jsp").forward(req, resp);
+            return;
         }
+
         String deleteId = req.getParameter("deleteId");
         if (deleteId != null) {
             Project project = new Project();
@@ -48,7 +56,7 @@ public class ProjectServlet extends HttpServlet {
             String name = req.getParameter("name");
             String start = req.getParameter("start");
             String coast = req.getParameter("coast");
-            if (name == null  || name.matches("\\d+") || name.equals("")  || start.equals("")
+            if (name == null || name.matches("\\d+") || name.equals("") || start.equals("")
                     || !start.matches("\\d{4}-\\d{2}-\\d{2}") || !coast.matches("\\d{3,8}")) {
                 resp.sendRedirect("/projects/createProject");
                 return;
@@ -73,7 +81,12 @@ public class ProjectServlet extends HttpServlet {
                 return;
 
             }
-            Project project = new Project(Long.parseLong(req.getParameter("updateId")), name, Date.valueOf(start), Integer.parseInt(coast));
+            Project project = new Project();
+            project.setId(Long.parseLong(req.getParameter("updateId")));
+            project.setName(name);
+            project.setStart(Date.valueOf(start));
+            project.setCoast(Integer.parseInt(coast));
+
             projectRepository.update(project);
             req.getSession().setAttribute("project", project);
             resp.sendRedirect("/projects");
