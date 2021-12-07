@@ -26,8 +26,8 @@ public class Customer implements  Identity {
     private String location;
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinTable(name = "companie_project",
-            joinColumns = @JoinColumn(name = "companie_id"),
+    @JoinTable(name = "customer_project",
+            joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     @ToString.Exclude
 

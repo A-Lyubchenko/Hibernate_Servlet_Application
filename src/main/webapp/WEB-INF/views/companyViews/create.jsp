@@ -46,12 +46,6 @@
 <br/>
 <form class="row g-3" method="POST" action="companies/createCompany">
     <div class="col-md-6">
-<%--        <label class="form-label" for="id"><strong>Enter id</strong></label>--%>
-<%--        <input class="form-control" type="text" name="id" id="id" placeholder="company/id">--%>
-<%--        <div style="color: green"  errors="${id}">Id must be decimal</div>--%>
-<%--    </div>--%>
-<%--    <br/>--%>
-<%--    <br/>--%>
     <div class="col-md-6">
         <label class="form-label" for="name"><strong>Enter name</strong></label>
         <input class="form-control" type="text" name="name" id="name" placeholder="company/name">

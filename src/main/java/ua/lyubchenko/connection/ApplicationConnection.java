@@ -3,16 +3,8 @@ package ua.lyubchenko.connection;
 import lombok.SneakyThrows;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import ua.lyubchenko.domains.*;
-import ua.lyubchenko.repositories.Identity;
-
-
-import java.util.Properties;
 
 public class ApplicationConnection {
     private static ApplicationConnection instance;

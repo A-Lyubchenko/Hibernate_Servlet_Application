@@ -86,7 +86,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="project" items="${projects}" varStatus="session">
+    <c:forEach var="project" items="${developer.getProjects()}" varStatus="session">
       <tr>
         <td><c:out value = "${project.name}"/></td>
       </tr>
@@ -101,7 +101,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="company" items="${companies}" varStatus="session">
+    <c:forEach var="company" items="${developer.getCompanies()}" varStatus="session">
       <tr>
         <td><c:out value = "${company.name}"/></td>
       </tr>
@@ -116,9 +116,9 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="skill" items="${skills}" varStatus="session">
+    <c:forEach var="skill" items="${developer.getSkills()}" varStatus="session">
       <tr>
-        <td><c:out value = "${skill.department}"/></td>
+        <td><c:out value = "${skill.department}  (${skill.level})"/></td>
       </tr>
     </c:forEach>
     </tbody>

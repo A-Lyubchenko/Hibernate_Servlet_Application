@@ -26,7 +26,7 @@ public class Company implements Identity {
     @Column(name = "location")
     private String location;
 
-    @OneToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "developer_companie",
             joinColumns = @JoinColumn(name = "companie_id"),
             inverseJoinColumns = @JoinColumn(name = "developer_id"))

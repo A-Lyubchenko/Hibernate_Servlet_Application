@@ -1,7 +1,6 @@
 package ua.lyubchenko.servlets;
 
-import org.hibernate.Session;
-import ua.lyubchenko.connection.ApplicationConnection;
+import ua.lyubchenko.domains.Project;
 import ua.lyubchenko.domains.Skill;
 import ua.lyubchenko.repositories.EntityRepository;
 import ua.lyubchenko.repositories.ICrud;
@@ -16,7 +15,6 @@ import java.io.IOException;
 @WebServlet("/skills/*")
 public class SkillServlet extends HttpServlet {
     private final ICrud<Skill> skillRepository= new EntityRepository<>();
-    private final Session session = ApplicationConnection.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,8 +27,8 @@ public class SkillServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/views/skillViews/update.jsp").forward(req, resp);
             return;
         } else if (requestURI.contains("/about")) {
-            Skill skill = session.get(Skill.class, Long.parseLong(req.getParameter("aboutId")));
-            req.setAttribute("skill", skillRepository.getById(Skill.class, Long.parseLong(req.getParameter("aboutId"))));
+            Skill skill = skillRepository.getById(Skill.class, Long.parseLong(req.getParameter("aboutId")));
+            req.setAttribute("skill", skill);
             req.setAttribute("developers", skill.getDevelopers());
             req.getRequestDispatcher("/WEB-INF/views/skillViews/about.jsp").forward(req, resp);
             return;
@@ -72,11 +70,11 @@ public class SkillServlet extends HttpServlet {
             String level = req.getParameter("level");
             if (department == null || department.equals("")
                     || department.matches("\\d+") || level==null || level.equals("") || level.matches("\\d+")) {
-                resp.sendRedirect("/skills/updateSkill");
+                resp.sendRedirect("/skills/updateSkill?updateId=" + req.getParameter("updateId"));
                 return;
 
             }
-            Skill skill = new Skill();
+            Skill skill = skillRepository.getById(Skill.class, Long.parseLong(req.getParameter("updateId")));
             skill.setId(Long.parseLong(req.getParameter("updateId")));
             skill.setDepartment(department);
             skill.setLevel(level);

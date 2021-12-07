@@ -22,7 +22,6 @@ import java.util.List;
 public class DeveloperServlet extends HttpServlet {
     private final ICrud<Company> companyRepository = new EntityRepository<>();
     private final ICrud<Developer> developerRepository= new EntityRepository<>();
-    private final Session session = ApplicationConnection.getInstance();
     private final ICrud<Project> projectRepository = new EntityRepository<>();
     private final ICrud<Skill> skillRepository= new EntityRepository<>();
     @Override
@@ -41,11 +40,8 @@ public class DeveloperServlet extends HttpServlet {
             return;
         }
         else if (requestURI.contains("/about")) {
-            Developer developer = session.get(Developer.class, Long.parseLong(req.getParameter("aboutId")));
-            req.setAttribute("developer", developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("aboutId"))));
-            req.setAttribute("projects", developer.getProjects());
-            req.setAttribute("companies",developer.getCompanies());
-            req.setAttribute("skills",developer.getSkills());
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("aboutId")));
+            req.setAttribute("developer", developer);
             req.getRequestDispatcher("/WEB-INF/views/developerViews/about.jsp").forward(req, resp);
             return;
         }
@@ -83,9 +79,9 @@ public class DeveloperServlet extends HttpServlet {
                 return;
 
             }
-            Company company = session.get(Company.class, Long.valueOf(choseCompany));
-            Project project = session.get(Project.class, Long.valueOf(chooseProject));
-            Skill skill = session.get(Skill.class, Long.valueOf(chooseSkill));
+            Company company = companyRepository.getById(Company.class, Long.valueOf(choseCompany));
+            Project project = projectRepository.getById(Project.class, Long.valueOf(chooseProject));
+            Skill skill = skillRepository.getById(Skill.class, Long.valueOf(chooseSkill));
 
             Developer developer = new Developer();
             developer.setName(name);
@@ -113,11 +109,11 @@ public class DeveloperServlet extends HttpServlet {
             if (name == null || name.matches("\\d+") || name.equals("") || age.matches("\\W+")
                     || sex == null || sex.equals("") || !sex.equals("male") && !sex.equals("female")
                     || !phone_number.matches("\\d{10}") || !salary.matches("\\d{1,5}")) {
-                resp.sendRedirect("/developers/updateDeveloper");
+                resp.sendRedirect("/developers/updateDeveloper?updateId=" + req.getParameter("updateId"));
                 return;
-
             }
-            Developer developer = new Developer();
+
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("updateId")));
             developer.setId(Long.parseLong(req.getParameter("updateId")));
             developer.setName(name);
             developer.setAge(Integer.parseInt(age));

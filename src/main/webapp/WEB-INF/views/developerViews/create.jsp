@@ -102,7 +102,7 @@
     <div class="col-md-6">
         <strong>Choose Project</strong>
         <select class="form-select" aria-label="Default select example" name="project">
-            <option selected>Open this company menu</option>
+            <option selected>Open this projects menu</option>
             <c:forEach var="project" items="${projects}" varStatus="session">
                 <option value="${project.id}">${project.name}</option>
             </c:forEach>
@@ -113,9 +113,9 @@
     <div class="col-md-6">
         <strong>Choose Skill</strong>
         <select class="form-select" aria-label="Default select example" name="skill">
-            <option selected>Open this company menu</option>
+            <option selected>Open this skills menu</option>
             <c:forEach var="skill" items="${skills}" varStatus="session">
-                <option value="${skill.id}">${skill.department}</option>
+                <option value="${skill.id}">${skill.department}    (${skill.level})</option>
             </c:forEach>
         </select>
     </div>

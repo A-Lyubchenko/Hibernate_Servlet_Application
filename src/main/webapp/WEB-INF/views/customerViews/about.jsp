@@ -81,7 +81,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="project" items="${projects}" varStatus="session">
+    <c:forEach var="project" items="${customer.getProjects()}" varStatus="session">
       <tr>
         <td><c:out value = "${project.name}"/></td>
       </tr>

@@ -1,9 +1,9 @@
 package ua.lyubchenko.servlets;
 
 
-import org.hibernate.Session;
-import ua.lyubchenko.connection.ApplicationConnection;
 import ua.lyubchenko.domains.Company;
+import ua.lyubchenko.domains.Developer;
+import ua.lyubchenko.domains.Project;
 import ua.lyubchenko.repositories.EntityRepository;
 import ua.lyubchenko.repositories.ICrud;
 
@@ -14,12 +14,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 
 @WebServlet("/companies/*")
 public class CompanyServlet extends HttpServlet {
     private final ICrud<Company> companyRepository = new EntityRepository<>();
-    private final Session session = ApplicationConnection.getInstance();
+    private final ICrud<Project> projectRepository = new EntityRepository<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,14 +30,14 @@ public class CompanyServlet extends HttpServlet {
             return;
         } else if (requestURI.contains("/updateCompany")) {
             req.setAttribute("updateId", req.getParameter("updateId"));
+            Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("updateId")));
+            req.setAttribute("company", company);
+            req.setAttribute("projects", projectRepository.read(Project.class));
             req.getRequestDispatcher("/WEB-INF/views/companyViews/update.jsp").forward(req, resp);
             return;
-        }
-        else if (requestURI.contains("/about")) {
-            Company company = session.get(Company.class, Long.parseLong(req.getParameter("aboutId")));
-            req.setAttribute("company", companyRepository.getById(Company.class, Long.parseLong(req.getParameter("aboutId"))));
-            req.setAttribute("developers", company.getDevelopers());
-            req.setAttribute("projects", company.getProjects());
+        } else if (requestURI.contains("/about")) {
+            Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("aboutId")));
+            req.setAttribute("company", company);
             req.getRequestDispatcher("/WEB-INF/views/companyViews/about.jsp").forward(req, resp);
             return;
         }
@@ -79,17 +80,19 @@ public class CompanyServlet extends HttpServlet {
         } else if (requestURI.contains("/updateCompany")) {
             String name = req.getParameter("name");
             String location = req.getParameter("location");
-
+            String chooseProject = req.getParameter("project");
             if (name == null || location == null || name.equals("") || location.equals("")
                     || name.matches("\\d+") || location.matches("\\d+")) {
-                resp.sendRedirect("/companies/createCompany");
+                resp.sendRedirect("/companies/updateCompany?updateId=" + req.getParameter("updateId"));
                 return;
 
             }
-            Company company = new Company();
+            Project project = projectRepository.getById(Project.class, Long.valueOf(chooseProject));
+            Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("updateId")));
             company.setId(Long.parseLong(req.getParameter("updateId")));
             company.setName(name);
             company.setLocation(location);
+            company.setProjects(List.of(project));
 
             companyRepository.update(company);
             req.getSession().setAttribute("company", company);

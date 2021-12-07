@@ -68,6 +68,30 @@
     </div>
     <br/>
     <br/>
+
+    <div class="col-md-6">
+        <strong>Choose Company</strong>
+        <select class="form-select" aria-label="Default select example" name="company">
+            <option selected>Open this company menu</option>
+            <c:forEach var="company" items="${companies}" varStatus="session">
+                <option value="${company.id}">${company.name}</option>
+            </c:forEach>
+        </select>
+    </div>
+    <br/>
+    <br/>
+
+    <div class="col-md-6">
+        <strong>Choose Customer</strong>
+        <select class="form-select" aria-label="Default select example" name="customer">
+            <option selected>Open this customers menu</option>
+            <c:forEach var="customer" items="${customers}" varStatus="session">
+                <option value="${customer.id}">${customer.name}</option>
+            </c:forEach>
+        </select>
+    </div>
+    <br/>
+    <br/>
     <h4 style="color: blue">If you write wrong field, page will refresh</h4>
     <input class="btn btn-success" type="submit"  value="Create"/>
 </form>

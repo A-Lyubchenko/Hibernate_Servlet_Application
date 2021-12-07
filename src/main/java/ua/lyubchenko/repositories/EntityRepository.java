@@ -19,7 +19,6 @@ public class EntityRepository<T extends Identity> implements ICrud<T> {
         try {
 
             resultList = session.createQuery(" FROM " + clazz.getSimpleName() + " s ORDER BY s.id", clazz).getResultList();
-            session.getTransaction();
             transaction.commit();
 
 
@@ -36,7 +35,6 @@ public class EntityRepository<T extends Identity> implements ICrud<T> {
         Transaction transaction = getTransaction();
         try {
             session.persist(entity);
-            session.getTransaction();
             transaction.commit();
 
 
@@ -54,7 +52,6 @@ public class EntityRepository<T extends Identity> implements ICrud<T> {
             session.flush();
             session.clear();
             session.remove(entity);
-            session.getTransaction();
             transaction.commit();
 
 
@@ -70,7 +67,6 @@ public class EntityRepository<T extends Identity> implements ICrud<T> {
         T entity = null;
         try {
             entity = session.get(clazz, id);
-            session.getTransaction();
             transaction.commit();
 
 
@@ -84,8 +80,7 @@ public class EntityRepository<T extends Identity> implements ICrud<T> {
     public void update(T entity) {
         Transaction transaction = getTransaction();
         try {
-            session.merge(entity);
-            session.getTransaction();
+            session.saveOrUpdate(entity);
             transaction.commit();
 
 

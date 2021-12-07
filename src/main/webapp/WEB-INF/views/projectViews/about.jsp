@@ -84,12 +84,43 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="developer" items="${developers}" varStatus="session">
+        <c:forEach var="developer" items="${project.getDevelopers()}" varStatus="session">
             <tr>
                 <td><c:out value = "${developer.name}"/></td>
             </tr>
         </c:forEach>
-        <%--            </c:forEach>--%>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name of Company having in this project</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="company" items="${project.getCompany()}" varStatus="session">
+            <tr>
+                <td><c:out value = "${company.name}"/></td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name of Customer having in this project</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="customer" items="${project.getCustomer()}" varStatus="session">
+            <tr>
+                <td><c:out value = "${customer.name}"/></td>
+            </tr>
+        </c:forEach>
         </tbody>
     </table>
 
