@@ -34,18 +34,6 @@
     </div>
     <br/>
     <br/>
-
-    <div class="col-md-6">
-        <strong>Choose Project</strong>
-        <select class="form-select" aria-label="Default select example" name="project">
-            <option selected>Open this project menu</option>
-            <c:forEach var="project" items="${projects}" varStatus="session">
-                <option value="${project.id}">${project.name}</option>
-            </c:forEach>
-        </select>
-    </div>
-    <br/>
-    <br/>
     <h4 style="color: blue">If you write wrong field, page will refresh</h4>
     <input class="btn btn-success" type="submit"  value="Update"/>
 </form>

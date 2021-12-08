@@ -2,7 +2,6 @@ package ua.lyubchenko.servlets;
 
 import ua.lyubchenko.domains.Company;
 import ua.lyubchenko.domains.Customer;
-import ua.lyubchenko.domains.Developer;
 import ua.lyubchenko.domains.Project;
 import ua.lyubchenko.repositories.EntityRepository;
 import ua.lyubchenko.repositories.ICrud;

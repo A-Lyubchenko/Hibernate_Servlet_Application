@@ -1,6 +1,5 @@
 package ua.lyubchenko.servlets;
 
-import ua.lyubchenko.domains.Project;
 import ua.lyubchenko.domains.Skill;
 import ua.lyubchenko.repositories.EntityRepository;
 import ua.lyubchenko.repositories.ICrud;

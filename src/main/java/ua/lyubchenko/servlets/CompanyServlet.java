@@ -21,6 +21,7 @@ import java.util.List;
 public class CompanyServlet extends HttpServlet {
     private final ICrud<Company> companyRepository = new EntityRepository<>();
     private final ICrud<Project> projectRepository = new EntityRepository<>();
+    private final ICrud<Developer> developerRepository = new EntityRepository<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,6 +40,30 @@ public class CompanyServlet extends HttpServlet {
             Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("aboutId")));
             req.setAttribute("company", company);
             req.getRequestDispatcher("/WEB-INF/views/companyViews/about.jsp").forward(req, resp);
+            return;
+
+
+        } else if (requestURI.contains("/addDeveloper")) {
+            req.setAttribute("developers", developerRepository.read(Developer.class));
+            req.setAttribute("companyId", req.getParameter("companyId"));
+            req.getRequestDispatcher("/WEB-INF/views/companyViews/addDeveloper.jsp").forward(req, resp);
+            return;
+        } else if (requestURI.contains("/addProject")) {
+            req.setAttribute("projects", projectRepository.read(Project.class));
+            req.setAttribute("companyId", req.getParameter("companyId"));
+            req.getRequestDispatcher("/WEB-INF/views/companyViews/addProject.jsp").forward(req, resp);
+            return;
+        } else if (requestURI.contains("/deleteProject")) {
+            Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("companyId")));
+            List<Project> projects = company.getProjects();
+            projects.removeIf(project -> project.getId() == Long.parseLong(req.getParameter("projectId")));
+            resp.sendRedirect("/companies/about?aboutId=" + req.getParameter("companyId"));
+            return;
+        } else if (requestURI.contains("/deleteDeveloper")) {
+            Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("companyId")));
+            List<Developer> developers = company.getDevelopers();
+            developers.removeIf(developer -> developer.getId() == Long.parseLong(req.getParameter("developerId")));
+            resp.sendRedirect("/companies/about?aboutId=" + req.getParameter("companyId"));
             return;
         }
         String deleteId = req.getParameter("deleteId");
@@ -80,23 +105,36 @@ public class CompanyServlet extends HttpServlet {
         } else if (requestURI.contains("/updateCompany")) {
             String name = req.getParameter("name");
             String location = req.getParameter("location");
-            String chooseProject = req.getParameter("project");
             if (name == null || location == null || name.equals("") || location.equals("")
                     || name.matches("\\d+") || location.matches("\\d+")) {
                 resp.sendRedirect("/companies/updateCompany?updateId=" + req.getParameter("updateId"));
                 return;
 
             }
-            Project project = projectRepository.getById(Project.class, Long.valueOf(chooseProject));
             Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("updateId")));
             company.setId(Long.parseLong(req.getParameter("updateId")));
             company.setName(name);
             company.setLocation(location);
-            company.setProjects(List.of(project));
 
             companyRepository.update(company);
             req.getSession().setAttribute("company", company);
             resp.sendRedirect("/companies");
+
+
+        } else if (requestURI.contains("/addDeveloper")) {
+            Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("companyId")));
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("developer")));
+            List<Developer> developers = company.getDevelopers();
+            developers.add(developer);
+            resp.sendRedirect("/companies/about?aboutId=" + req.getParameter("companyId"));
+
+        } else if (requestURI.contains("/addProject")) {
+            Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("companyId")));
+            Project project = projectRepository.getById(Project.class, Long.parseLong(req.getParameter("project")));
+            List<Project> projects = company.getProjects();
+            projects.add(project);
+            resp.sendRedirect("/companies/about?aboutId=" + req.getParameter("companyId"));
+
         }
     }
 

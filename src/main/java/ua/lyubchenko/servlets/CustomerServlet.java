@@ -1,6 +1,5 @@
 package ua.lyubchenko.servlets;
 
-import ua.lyubchenko.domains.Company;
 import ua.lyubchenko.domains.Customer;
 import ua.lyubchenko.domains.Project;
 import ua.lyubchenko.repositories.EntityRepository;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @WebServlet("/customers/*")
 public class CustomerServlet extends HttpServlet {
-    private final ICrud<Customer> customerRepository= new EntityRepository<>();
+    private final ICrud<Customer> customerRepository = new EntityRepository<>();
     private final ICrud<Project> projectRepository = new EntityRepository<>();
 
 
@@ -34,11 +33,23 @@ public class CustomerServlet extends HttpServlet {
             req.setAttribute("projects", projectRepository.read(Project.class));
             req.getRequestDispatcher("/WEB-INF/views/customerViews/update.jsp").forward(req, resp);
             return;
-        }
-        else if (requestURI.contains("/about")) {
+        } else if (requestURI.contains("/about")) {
             Customer customer = customerRepository.getById(Customer.class, Long.parseLong(req.getParameter("aboutId")));
             req.setAttribute("customer", customer);
             req.getRequestDispatcher("/WEB-INF/views/customerViews/about.jsp").forward(req, resp);
+            return;
+
+        } else if (requestURI.contains("/addProject")) {
+            req.setAttribute("projects", projectRepository.read(Project.class));
+            req.setAttribute("customerId", req.getParameter("customerId"));
+            req.getRequestDispatcher("/WEB-INF/views/customerViews/addProject.jsp").forward(req, resp);
+            return;
+        }
+        else if (requestURI.contains("/deleteProject")) {
+            Customer customer = customerRepository.getById(Customer.class, Long.parseLong(req.getParameter("customerId")));
+            List<Project> projects = customer.getProjects();
+            projects.removeIf(project -> project.getId() == Long.parseLong(req.getParameter("projectId")));
+            resp.sendRedirect("/customers/about?aboutId=" + req.getParameter("customerId"));
             return;
         }
 
@@ -77,15 +88,13 @@ public class CustomerServlet extends HttpServlet {
         } else if (requestURI.contains("/updateCustomer")) {
             String name = req.getParameter("name");
             String location = req.getParameter("location");
-            String chooseProject = req.getParameter("project");
 
-            Project project = projectRepository.getById(Project.class, Long.valueOf(chooseProject));
+
             Customer customer = customerRepository.getById(Customer.class, Long.parseLong(req.getParameter("updateId")));
 
             customer.setId(Long.parseLong(req.getParameter("updateId")));
             customer.setName(name);
             customer.setLocation(location);
-            customer.setProjects(List.of(project));
 
             if (name == null || location == null || name.equals("") || location.equals("")
                     || name.matches("\\d+") || location.matches("\\d+")) {
@@ -96,6 +105,14 @@ public class CustomerServlet extends HttpServlet {
             customerRepository.update(customer);
             req.getSession().setAttribute("customer", customer);
             resp.sendRedirect("/customers");
+        }
+        else if (requestURI.contains("/addProject")) {
+            Customer customer = customerRepository.getById(Customer.class, Long.parseLong(req.getParameter("customerId")));
+            Project project = projectRepository.getById(Project.class, Long.parseLong(req.getParameter("project")));
+            List<Project> projects = customer.getProjects();
+            projects.add(project);
+            resp.sendRedirect("/customers/about?aboutId=" + req.getParameter("customerId"));
+
         }
 
     }

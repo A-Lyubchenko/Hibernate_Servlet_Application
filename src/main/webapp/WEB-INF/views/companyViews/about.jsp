@@ -47,30 +47,32 @@
     <div class="row">
         <h2>Company page</h2>
     </div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Location</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><c:out value = "${company.id}"/></td>
-                    <td><c:out value = "${company.name}"/></td>
-                    <td><c:out value = "${company.location}"/></td>
-                    <td>
-                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                            <div class="btn-group me-2" role="group" aria-label="Second group">
-                                <a href="companies/updateCompany?updateId=<c:out value = '${company.id}'/>" type="button" class="btn btn-warning">Edit</a>
-                                <a href="companies/companies?deleteId=<c:out value = '${company.id}'/>" type="button" class="btn btn-danger">Remove</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><c:out value="${company.id}"/></td>
+            <td><c:out value="${company.name}"/></td>
+            <td><c:out value="${company.location}"/></td>
+            <td>
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group me-2" role="group" aria-label="Second group">
+                        <a href="companies/updateCompany?updateId=<c:out value = '${company.id}'/>" type="button"
+                           class="btn btn-warning">Edit</a>
+                        <a href="companies/companies?deleteId=<c:out value = '${company.id}'/>" type="button"
+                           class="btn btn-danger">Remove</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
     <table class="table">
         <thead>
@@ -82,11 +84,26 @@
         <tbody>
         <c:forEach var="developer" items="${company.getDevelopers()}" varStatus="session">
             <tr>
-                <td><c:out value = "${developer.name}"/></td>
+                <td><c:out value="${developer.name}"/></td>
+                <td>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group me-2" role="group" aria-label="Second group">
+                            <a href="companies/deleteDeveloper?developerId=<c:out value = '${developer.id}'/>&companyId=<c:out value = '${company.id}'/>"
+                               type="button" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group me-2" role="group" aria-label="Second group">
+            <a href="companies/addDeveloper?companyId=<c:out value = '${company.id}'/>" type="button"
+               class="btn btn-success">Add developer</a>
+        </div>
+    </div>
+
     <table class="table">
         <thead>
         <tr>
@@ -97,12 +114,26 @@
         <tbody>
         <c:forEach var="project" items="${company.getProjects()}" varStatus="session">
             <tr>
-                <td><c:out value = "${project.name}"/></td>
+                <td><c:out value="${project.name}"/></td>
+                <td>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group me-2" role="group" aria-label="Second group">
+                            <a href="companies/deleteProject?projectId=<c:out value = '${project.id}'/>&companyId=<c:out value = '${company.id}'/>"
+                               type="button" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group me-2" role="group" aria-label="Second group">
+            <a href="companies/addProject?companyId=<c:out value = '${company.id}'/>" type="button"
+               class="btn btn-success">Add project</a>
+        </div>
     </div>
+</div>
 </body>
 </html>
 

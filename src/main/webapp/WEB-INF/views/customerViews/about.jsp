@@ -84,10 +84,24 @@
     <c:forEach var="project" items="${customer.getProjects()}" varStatus="session">
       <tr>
         <td><c:out value = "${project.name}"/></td>
+        <td>
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group me-2" role="group" aria-label="Second group">
+              <a href="customers/deleteProject?projectId=<c:out value = '${project.id}'/>&customerId=<c:out value = '${customer.id}'/>"
+                 type="button" class="btn btn-danger">Delete</a>
+            </div>
+          </div>
+        </td>
       </tr>
     </c:forEach>
     </tbody>
   </table>
+
+  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group me-2" role="group" aria-label="Second group">
+      <a href="customers/addProject?customerId=<c:out value = '${customer.id}'/>" type="button" class="btn btn-success">Add project</a>
+    </div>
+  </div>
 </div>
 </body>
 </html>

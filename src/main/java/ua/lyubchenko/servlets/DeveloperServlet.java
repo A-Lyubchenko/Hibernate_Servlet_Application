@@ -1,7 +1,5 @@
 package ua.lyubchenko.servlets;
 
-import org.hibernate.Session;
-import ua.lyubchenko.connection.ApplicationConnection;
 import ua.lyubchenko.domains.Company;
 import ua.lyubchenko.domains.Developer;
 import ua.lyubchenko.domains.Project;
@@ -21,14 +19,15 @@ import java.util.List;
 @WebServlet("/developers/*")
 public class DeveloperServlet extends HttpServlet {
     private final ICrud<Company> companyRepository = new EntityRepository<>();
-    private final ICrud<Developer> developerRepository= new EntityRepository<>();
+    private final ICrud<Developer> developerRepository = new EntityRepository<>();
     private final ICrud<Project> projectRepository = new EntityRepository<>();
-    private final ICrud<Skill> skillRepository= new EntityRepository<>();
+    private final ICrud<Skill> skillRepository = new EntityRepository<>();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestURI = req.getRequestURI();
         if (requestURI.contains("/createDeveloper")) {
-            req.setAttribute("companies",companyRepository.read(Company.class));
+            req.setAttribute("companies", companyRepository.read(Company.class));
             req.setAttribute("projects", projectRepository.read(Project.class));
             req.setAttribute("skills", skillRepository.read(Skill.class));
             req.getRequestDispatcher("/WEB-INF/views/developerViews/create.jsp").forward(req, resp);
@@ -38,13 +37,48 @@ public class DeveloperServlet extends HttpServlet {
             req.setAttribute("updateId", req.getParameter("updateId"));
             req.getRequestDispatcher("/WEB-INF/views/developerViews/update.jsp").forward(req, resp);
             return;
-        }
-        else if (requestURI.contains("/about")) {
+        } else if (requestURI.contains("/deleteProject")) {
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("developerId")));
+            List<Project> projects = developer.getProjects();
+            projects.removeIf(project -> project.getId() == Long.parseLong(req.getParameter("projectId")));
+            resp.sendRedirect("/developers/about?aboutId=" + req.getParameter("developerId"));
+            return;
+        } else if (requestURI.contains("/deleteCompany")) {
+
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("developerId")));
+            List<Company> companies = developer.getCompanies();
+            companies.removeIf(company -> company.getId() == Long.parseLong(req.getParameter("companyId")));
+            resp.sendRedirect("/developers/about?aboutId=" + req.getParameter("developerId"));
+            return;
+        } else if (requestURI.contains("/deleteSkill")) {
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("developerId")));
+            List<Skill> skills = developer.getSkills();
+            skills.removeIf(skill -> skill.getId() == Long.parseLong(req.getParameter("skillId")));
+            resp.sendRedirect("/developers/about?aboutId=" + req.getParameter("developerId"));
+            return;
+        } else if (requestURI.contains("/addProject")) {
+            req.setAttribute("projects", projectRepository.read(Project.class));
+            req.setAttribute("developerId", req.getParameter("developerId"));
+            req.getRequestDispatcher("/WEB-INF/views/developerViews/addProject.jsp").forward(req, resp);
+            return;
+        } else if (requestURI.contains("/addCompany")) {
+            req.setAttribute("companies", companyRepository.read(Company.class));
+            req.setAttribute("developerId", req.getParameter("developerId"));
+            req.getRequestDispatcher("/WEB-INF/views/developerViews/addCompany.jsp").forward(req, resp);
+            return;
+        } else if (requestURI.contains("/addSkill")) {
+            req.setAttribute("skills", skillRepository.read(Skill.class));
+            req.setAttribute("developerId", req.getParameter("developerId"));
+            req.getRequestDispatcher("/WEB-INF/views/developerViews/addSkill.jsp").forward(req, resp);
+            return;
+
+        } else if (requestURI.contains("/about")) {
             Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("aboutId")));
             req.setAttribute("developer", developer);
             req.getRequestDispatcher("/WEB-INF/views/developerViews/about.jsp").forward(req, resp);
             return;
         }
+
 
         String deleteId = req.getParameter("deleteId");
         if (deleteId != null) {
@@ -124,6 +158,28 @@ public class DeveloperServlet extends HttpServlet {
             developerRepository.update(developer);
             req.getSession().setAttribute("developer", developer);
             resp.sendRedirect("/developers");
+
+        } else if (requestURI.contains("/addProject")) {
+            Project project = projectRepository.getById(Project.class, Long.parseLong(req.getParameter("project")));
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("developerId")));
+            List<Project> projects = developer.getProjects();
+            projects.add(project);
+            resp.sendRedirect("/developers/about?aboutId=" + req.getParameter("developerId"));
+
+        } else if (requestURI.contains("/addCompany")) {
+            Company company = companyRepository.getById(Company.class, Long.parseLong(req.getParameter("companyId")));
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("developerId")));
+            List<Company> companies = developer.getCompanies();
+            companies.add(company);
+            resp.sendRedirect("/developers/about?aboutId=" + req.getParameter("developerId"));
+
+        } else if (requestURI.contains("/addSkill")) {
+            Skill skill = skillRepository.getById(Skill.class, Long.parseLong(req.getParameter("skillId")));
+            Developer developer = developerRepository.getById(Developer.class, Long.parseLong(req.getParameter("developerId")));
+            List<Skill> skills = developer.getSkills();
+            skills.add(skill);
+            resp.sendRedirect("/developers/about?aboutId=" + req.getParameter("developerId"));
+
         }
     }
 }

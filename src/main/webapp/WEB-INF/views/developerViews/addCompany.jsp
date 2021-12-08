@@ -4,15 +4,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>UPDATE COMPANY</title>
+    <title>UPDATE DEVELOPER</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
             crossorigin="anonymous"></script>
 </head>
-
-
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
@@ -43,31 +41,24 @@
     </div>
 </nav>
 
-
-
-<h2 class="btn-success">UPDATE COMPANY</h2>
+<h2 class="btn-success">ADD COMPANY FOR DEVELOPER</h2>
 <br/>
 <br/>
-<form class="row g-3" method="POST" action="companies/updateCompany">
-    <input type="hidden" name="updateId" value="${updateId}">
-    <br/>
-    <br/>
+
+<form class="row g-3" method="POST" action="developers/addCompany">
+    <input type="hidden" name="developerId" value="${developerId}">
     <div class="col-md-6">
-        <label class="form-label" for="name"><strong>Enter new name</strong></label>
-        <input class="form-control" type="text" name="name" id="name">
-        <div style="color: green" if="${fields.hasErrors('name')}" errors="${name}">Name must not be decimal</div>
+        <strong>Choose Company</strong>
+        <select class="form-select" aria-label="Default select example" name="companyId">
+            <option selected>Open this company menu</option>
+            <c:forEach var="company" items="${companies}" varStatus="session">
+                <option value="${company.id}">${company.name}</option>
+            </c:forEach>
+        </select>
     </div>
     <br/>
     <br/>
-    <div class="col-md-6">
-        <label class="form-label" for="location"><strong>Enter new location</strong></label>
-        <input class="form-control" type="text" name="location" id="location">
-        <div style="color: green" if="${fields.hasErrors('location')}" errors="${location}">Location must not be decimal</div>
-    </div>
-    <br/>
-    <br/>
-    <h4 style="color: blue">If you write wrong field, page will refresh</h4>
-    <input class="btn btn-success" type="submit"  value="Update"/>
+    <input class="btn btn-success" type="submit"  value="Add"/>
 </form>
 </body>
 </html>

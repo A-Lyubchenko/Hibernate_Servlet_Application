@@ -45,7 +45,6 @@
 <br/>
 <br/>
 <form class="row g-3" method="POST" action="developers/createDeveloper">
-    <input type="hidden" name="companyId" value="${company.id}">
 
     <div class="col-md-6">
         <label class="form-label" for="name"><strong>Enter name</strong></label>
