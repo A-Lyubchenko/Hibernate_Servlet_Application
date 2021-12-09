@@ -5,6 +5,7 @@ import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,7 +37,7 @@ public class Project implements Identity {
             inverseJoinColumns = @JoinColumn(name = "customer_id"))
     @ToString.Exclude
 
-    private List<Customer> customer;
+    private List<Customer> customer = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "companie_project",
@@ -44,7 +45,7 @@ public class Project implements Identity {
             inverseJoinColumns = @JoinColumn(name = "companie_id"))
     @ToString.Exclude
 
-    private List<Company> company;
+    private List<Company> company = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "developer_project",
@@ -52,6 +53,6 @@ public class Project implements Identity {
             inverseJoinColumns = @JoinColumn(name = "developer_id"))
     @ToString.Exclude
 
-    private List<Developer> developers;
+    private List<Developer> developers = new ArrayList<>();
 
 }

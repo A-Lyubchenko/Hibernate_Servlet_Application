@@ -65,7 +65,7 @@
                     <div class="btn-group me-2" role="group" aria-label="Second group">
                         <a href="companies/updateCompany?updateId=<c:out value = '${company.id}'/>" type="button"
                            class="btn btn-warning">Edit</a>
-                        <a href="companies/companies?deleteId=<c:out value = '${company.id}'/>" type="button"
+                        <a href="companies/remove?deleteId=<c:out value = '${company.id}'/>" type="button"
                            class="btn btn-danger">Remove</a>
                     </div>
                 </div>

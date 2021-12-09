@@ -4,6 +4,7 @@ import lombok.*;
 import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,6 +32,6 @@ public class Skill implements Identity {
             inverseJoinColumns = @JoinColumn(name = "developer_id"))
     @ToString.Exclude
 
-    private List<Developer> developers;
+    private List<Developer> developers = new ArrayList<>();
 
 }

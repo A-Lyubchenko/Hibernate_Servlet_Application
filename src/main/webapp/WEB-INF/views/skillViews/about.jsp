@@ -66,12 +66,11 @@
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group me-2" role="group" aria-label="Second group">
                                 <a href="skills/updateProject?updateId=<c:out value = '${skill.id}'/>" type="button" class="btn btn-warning">Edit</a>
-                                <a href="skills/skills?deleteId=<c:out value = '${skill.id}'/>" type="button" class="btn btn-danger">Remove</a>
+                                <a href="skills/remove?deleteId=<c:out value = '${skill.id}'/>" type="button" class="btn btn-danger">Remove</a>
                             </div>
                         </div>
                     </td>
                 </tr>
-<%--            </c:forEach>--%>
             </tbody>
         </table>
 
@@ -88,7 +87,6 @@
                 <td><c:out value = "${developer.name}"/></td>
             </tr>
         </c:forEach>
-        <%--            </c:forEach>--%>
         </tbody>
     </table>
     </div>

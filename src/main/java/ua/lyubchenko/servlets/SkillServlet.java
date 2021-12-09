@@ -1,22 +1,23 @@
 package ua.lyubchenko.servlets;
 
-import ua.lyubchenko.domains.Skill;
-import ua.lyubchenko.repositories.EntityRepository;
-import ua.lyubchenko.repositories.ICrud;
+import lombok.SneakyThrows;
+import ua.lyubchenko.services.SkillService;
 
-import javax.servlet.ServletException;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
 
 @WebServlet("/skills/*")
 public class SkillServlet extends HttpServlet {
-    private final ICrud<Skill> skillRepository= new EntityRepository<>();
 
+    private final SkillService skillService = new SkillService();
+
+    @SneakyThrows
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)  {
         String requestURI = req.getRequestURI();
         if (requestURI.contains("/createSkill")) {
             req.getRequestDispatcher("/WEB-INF/views/skillViews/create.jsp").forward(req, resp);
@@ -26,61 +27,24 @@ public class SkillServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/views/skillViews/update.jsp").forward(req, resp);
             return;
         } else if (requestURI.contains("/about")) {
-            Skill skill = skillRepository.getById(Skill.class, Long.parseLong(req.getParameter("aboutId")));
-            req.setAttribute("skill", skill);
-            req.setAttribute("developers", skill.getDevelopers());
-            req.getRequestDispatcher("/WEB-INF/views/skillViews/about.jsp").forward(req, resp);
+            skillService.getAboutPage(req,resp);
             return;
         }
-        String deleteId = req.getParameter("deleteId");
-        if (deleteId != null) {
-            Skill skill = new Skill();
-            skill.setId(Long.parseLong(deleteId));
-            skillRepository.delete(skill);
-            resp.sendRedirect("/skills");
+        else if (requestURI.contains("/remove")) {
+            skillService.remove(req, resp);
             return;
         }
-        req.setAttribute("skills", skillRepository.read(Skill.class));
-        req.getRequestDispatcher("/WEB-INF/views/skillViews/read.jsp").forward(req, resp);
+        skillService.read(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)  {
         String requestURI = req.getRequestURI();
         if (requestURI.contains("/createSkill")) {
-            String department = req.getParameter("department");
-            String level = req.getParameter("level");
-            if (department == null || department.equals("")
-                    || department.matches("\\d+") || level==null || level.equals("") || level.matches("\\d+")) {
-                resp.sendRedirect("/skills/createSkill");
-                return;
-
-            }
-            Skill skill = new Skill();
-            skill.setDepartment(department);
-            skill.setLevel(level);
-
-            skillRepository.create(skill);
-            req.getSession().setAttribute("skill", skill);
-            resp.sendRedirect("/skills");
+            skillService.create(req, resp);
 
         } else if (requestURI.contains("/updateSkill")) {
-            String department = req.getParameter("department");
-            String level = req.getParameter("level");
-            if (department == null || department.equals("")
-                    || department.matches("\\d+") || level==null || level.equals("") || level.matches("\\d+")) {
-                resp.sendRedirect("/skills/updateSkill?updateId=" + req.getParameter("updateId"));
-                return;
-
-            }
-            Skill skill = skillRepository.getById(Skill.class, Long.parseLong(req.getParameter("updateId")));
-            skill.setId(Long.parseLong(req.getParameter("updateId")));
-            skill.setDepartment(department);
-            skill.setLevel(level);
-
-            skillRepository.update(skill);
-            req.getSession().setAttribute("skill", skill);
-            resp.sendRedirect("/skills");
+            skillService.update(req, resp);
         }
     }
 }

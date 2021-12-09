@@ -4,6 +4,7 @@ import lombok.*;
 import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -40,7 +41,7 @@ public class Developer implements  Identity {
             inverseJoinColumns = @JoinColumn(name = "companie_id"))
     @ToString.Exclude
 
-    private List<Company> companies;
+    private List<Company> companies = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "developer_project",
@@ -48,7 +49,7 @@ public class Developer implements  Identity {
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     @ToString.Exclude
 
-    private List<Project> projects;
+    private List<Project> projects = new ArrayList<>();
 
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
@@ -57,5 +58,5 @@ public class Developer implements  Identity {
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
     @ToString.Exclude
 
-    private List<Skill> skills;
+    private List<Skill> skills = new ArrayList<>();
 }

@@ -48,9 +48,9 @@
 <form class="row g-3" method="POST" action="companies/addDeveloper">
     <input type="hidden" name="companyId" value="${companyId}">
     <div class="col-md-6">
-        <strong>Choose Project</strong>
-        <select class="form-select" aria-label="Default select example" name="developer">
-            <option selected>Open this projects menu</option>
+        <strong>Choose Developer</strong>
+        <select class="form-select" aria-label="Default select example" name="developerId">
+            <option selected>Open this developers menu</option>
             <c:forEach var="developer" items="${developers}" varStatus="session">
                 <option value="${developer.id}">Имя - ${developer.name}, возраст - ${developer.age},  тел - ${developer.phone_number}</option>
             </c:forEach>

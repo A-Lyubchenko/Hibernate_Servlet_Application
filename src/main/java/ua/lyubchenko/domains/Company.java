@@ -32,7 +32,7 @@ public class Company implements Identity {
             inverseJoinColumns = @JoinColumn(name = "developer_id"))
     @ToString.Exclude
 
-    private List<Developer> developers;
+    private List<Developer> developers = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "companie_project",
@@ -40,6 +40,6 @@ public class Company implements Identity {
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     @ToString.Exclude
 
-    private List<Project> projects;
+    private List<Project> projects = new ArrayList<>();
 
 }

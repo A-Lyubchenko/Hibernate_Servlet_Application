@@ -72,7 +72,7 @@
                     <div class="btn-group me-2" role="group" aria-label="Second group">
                         <a href="developers/updateDeveloper?updateId=<c:out value = '${developer.id}'/>" type="button"
                            class="btn btn-warning">Edit</a>
-                        <a href="developers/developers?deleteId=<c:out value = '${developer.id}'/>" type="button"
+                        <a href="developers/remove?deleteId=<c:out value = '${developer.id}'/>" type="button"
                            class="btn btn-danger">Remove</a>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import lombok.*;
 import ua.lyubchenko.repositories.Identity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -31,5 +32,5 @@ public class Customer implements  Identity {
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     @ToString.Exclude
 
-    private List<Project> projects;
+    private List<Project> projects = new ArrayList<>();
 }

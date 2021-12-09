@@ -65,7 +65,7 @@
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
           <div class="btn-group me-2" role="group" aria-label="Second group">
             <a href="customers/updateCustomer?updateId=<c:out value = '${customer.id}'/>" type="button" class="btn btn-warning">Edit</a>
-            <a href="customers/customers?deleteId=<c:out value = '${customer.id}'/>" type="button" class="btn btn-danger">Remove</a>
+            <a href="customers/remove?deleteId=<c:out value = '${customer.id}'/>" type="button" class="btn btn-danger">Remove</a>
           </div>
         </div>
       </td>
